@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "kartBaslik": "Galeriye Sızmak",
+    "kartAciklama": "Telefondan Mala Anlatır gibi Galeriye sızma rehberi",
+    "kartResimLink": "galery.png",
+    "link1": "https://instagram.com",
+    "link2": "https://task-instagram.com",
+    "dogrulamaKodu": "INSTA123"
+  },
+  {
+    "id": 2,
+    "kartBaslik": "Belge Oluşturucu",
+    "kartAciklama": "Takdir - Teşekkür - siktirname Oluştur",
+    "kartResimLink": "https://i.hizliresim.com/cqi8hu6.png",
+    "link1": "https://yuhamksbs.blogspot.com/2025/10/kendin-belgeni-olustur.html#free",
+    "link2": "https://task-youtube.com",
+    "dogrulamaKodu": "osuruk"
+  }
+]
